@@ -1,10 +1,5 @@
 <?php
 /**
- * Checkbox Sortable
- *
- * @package checkboxsortable
- */
-/**
  * @package checkboxsortable
  * @subpackage build
  */
@@ -17,6 +12,6 @@ $settings['checkboxsortable.test']->fromArray(array(
     'xtype' => 'textfield',
     'namespace' => 'checkboxsortable',
     'area' => 'Checkbox Sortable',
-),'',true,true);
+), '', true, true);
 
 return $settings;

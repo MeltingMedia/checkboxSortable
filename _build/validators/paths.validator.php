@@ -1,10 +1,5 @@
 <?php
 /**
- * Checkbox Sortable
- *
- * @package checkboxsortable
- */
-/**
  * Ensure that the paths are made writable so the files can be copied.
  *
  * @package checkboxsortable
@@ -14,14 +9,16 @@ $success = true;
 if ($object->xpdo) {
     switch ($options[xPDOTransport::PACKAGE_ACTION]) {
         case xPDOTransport::ACTION_INSTALL:
+            /** @var modX $modx */
             $modx =& $object->xpdo;
 
             $directories = array(
-                $object->xpdo->getOption('core_path').'model/modx/processors/element/tv/renders/mgr/input/',
-                $object->xpdo->getOption('manager_path').'templates/default/element/tv/renders/input/',
+                $modx->getOption('core_path') . 'model/modx/processors/element/tv/renders/mgr/input/',
+                $modx->getOption('manager_path') . 'templates/default/element/tv/renders/input/',
             );
+
             foreach ($directories as $dir) {
-                @chmod($dir,0775);
+                @chmod($dir, 0775);
                 if (!is_writable($dir)) {
                     $success = false;
                 }
@@ -29,6 +26,8 @@ if ($object->xpdo) {
 
             break;
         case xPDOTransport::ACTION_UPGRADE:
+            break;
+        case xPDOTransport::ACTION_UNINSTALL:
             break;
     }
 }
