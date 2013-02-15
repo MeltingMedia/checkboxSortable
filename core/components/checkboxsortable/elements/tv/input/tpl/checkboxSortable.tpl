@@ -1,79 +1,67 @@
-<div id="tv{$tv->id}-cb"></div>
+<div id="tv{$tv->id}-checkboxsortable"></div>
+
 <script type="text/javascript">
-// <![CDATA[
-{literal}
-    var reader{/literal}{$tv->id}{literal} = new Ext.data.ArrayReader({}, [
-        {name: 'id'},
-        {name: 'name'},
-        {name: 'value'},
-        {name: 'label'},
-        {name: 'checked'}
-    ]);
-    var store{/literal}{$tv->id}{literal} = new Ext.data.Store({
-        autoDestroy: true,
-        reader: reader{/literal}{$tv->id}{literal},
-        data: [{/literal}
-            {foreach from=$opts item=item key=k name=cbs}
-                {literal}[{/literal}                
-                'tv{$tv->id}-{$k}',
-                'tv{$tv->id}[]',
-                '{$item.value}',
-                '{$item.text|escape:"javascript"}',
-                '<center><input id="tv{$tv->id}-{$k}" type="checkbox" value="{$item.value}" name="tv{$tv->id}[]" {if $item.checked}checked{/if} /></center>'
-                {literal}],{/literal}
-            {/foreach}
-        {literal}]
-    });
-    var grid{/literal}{$tv->id}{literal} = new Ext.grid.GridPanel({
-        store: store{/literal}{$tv->id}{literal},
-        colModel: new Ext.grid.ColumnModel({
-            defaults: {
-                width: 250,
-                sortable: false
-            },
-            columns: [
-                {id: 'label', header: '{/literal}{$checkboxsortable.cbs_name}{literal}', dataIndex: 'label', width: 420},
-                {id: 'checked', header: '{/literal}{$checkboxsortable.cbs_active}{literal}', dataIndex: 'checked', width: 80}
-            ]
-        }),
-        listeners: {
-                    'click': {fn:MODx.fireResourceFormChange, scope:this}
-        },
-        viewConfig: {
-            forceFit: true
-        },
-        width: 500,
-        height: 450,
-        autoHeight: true,
-        frame: true,
-        enableDragDrop: true,
-        ddGroup: 'zusatzInhalteGroup',
-        ddText: '{/literal}{$checkboxsortable.cbs_sort}{literal}',
-        renderTo: {/literal}'tv{$tv->id}-cb'{literal}
-    });
-    var ddrow{/literal}{$tv->id}{literal} = new Ext.dd.DropTarget(
-        grid{/literal}{$tv->id}{literal}.getView().mainBody, {
-        ddGroup: 'zusatzInhalteGroup',
-        notifyDrop: function(dd, e, data) {
-            var sm = grid{/literal}{$tv->id}{literal}.getSelectionModel();
-            var rows = sm.getSelections();
-            var cindex = dd.getDragData(e).rowIndex;
-            var store = grid{/literal}{$tv->id}{literal}.getStore();
-			var checkbox_id = null;
-			var cb = null;
-            if (sm.hasSelection()) {
-                for (i = 0; i < rows.length; i ++) {
-                    checkbox_id = store.getById(rows[i].id).data.id;
-					cb_checked = Ext.get(checkbox_id).dom.checked;
-					store.remove(store.getById(rows[i].id));
-                    store.insert(cindex,rows[i]);
-					Ext.get(checkbox_id).dom.checked=cb_checked;
-				
+    // <![CDATA[
+    {literal}
+    Ext.onReady(function() {
+        // Populate the grid store
+        var store{/literal}{$tv->id}{literal} = new Ext.data.Store({
+            autoDestroy: true
+            ,reader: new Ext.data.ArrayReader({}, [
+                 {name: 'id'}
+                ,{name: 'name'}
+                ,{name: 'value'}
+                ,{name: 'label'}
+                ,{name: 'checked'}
+                //,{name: 'test'}
+            ])
+            ,data: [{/literal}
+                {foreach from=$opts item=item key=k name=checkboxsortable}
+                    {literal}[{/literal}
+                     'tv{$tv->id}-{$k}'
+                    ,'tv{$tv->id}[]'
+                    ,'{$item.value}'
+                    ,'{$item.text|escape:"javascript"}'
+                    ,{if $item.checked}true{else}false{/if}
+                    //,'<center><input id="tv{$tv->id}-{$k}" type="checkbox" value="{$item.value}" name="tv{$tv->id}[]" {if $item.checked}checked{/if} /></center>'
+                    {literal}],{/literal}
+                {/foreach}
+                {literal}]
+        });
+
+        var grid = new CheckboxSortable.TV({
+            store: store{/literal}{$tv->id}{literal}
+            ,renderTo: {/literal}'tv{$tv->id}-checkboxsortable'{literal}
+            ,autoPlace: {/literal}{if $params.autoplace}true{else}false{/if}{literal}
+        });
+
+        // Dirty work around to resize the grid
+        var tabs = Ext.getCmp('modx-resource-tabs');
+        tabs.on('tabChange', function(elem, tab) {
+        {/literal}
+            {if $params.tab_ids}
+                var array = '{$params.tab_ids}'.split(',');
+                Ext.each(array, function(item, idx, list) {
+                    list[idx] = item.trim();
+                });
+                if (array.indexOf(tab.id) != -1) {
+                    grid.refreshView();
                 }
-                sm.selectRecords(rows);
+            {else}
+                // Default TV panel
+                if (tab.id == 'modx-panel-resource-tv') {
+                    grid.refreshView();
+                }
+            {/if}
+        {literal}
+            if (tab.id == '{/literal}{$params.tab_ids}{literal}') {
+                grid.refreshView();
             }
-        }
+        });
+        tabs.on('resize', function() {
+            grid.refreshView();
+        });
     });
-{/literal}
-// ]]>
+    {/literal}
+    // ]]>
 </script>

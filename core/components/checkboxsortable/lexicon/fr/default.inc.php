@@ -1,5 +1,9 @@
 <?php
 
-$_lang['cbs_name'] = 'Nom';
-$_lang['cbs_active'] = 'Actif';
-$_lang['cbs_sort'] = 'Trier';
+$_lang['checkboxsortable'] = 'Checkbox Sortable';
+$_lang['checkboxsortable.column_name'] = 'Nom';
+$_lang['checkboxsortable.column_active'] = 'Actif';
+$_lang['checkboxsortable.entry_sort'] = 'Trier';
+
+$_lang['checkboxsortable.property_tab_id'] = 'IDs de tabs';
+$_lang['checkboxsortable.property_tab_id_desc'] = 'Si vous comptez utiliser la personnlisation de formulaire, indiquez ici une liste d\'IDs des tabs (séparés par des virugles) où sera affichée la TV.';

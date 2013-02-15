@@ -15,7 +15,7 @@ class modTemplateVarInputRenderCheckboxSortable extends modTemplateVarInputRende
         $inputOptions = $this->prepareRecords();
 
         $options = array();
-        if (!empty($value[0]) && count($value) > 0){
+        if (!empty($value[0]) && count($value) > 0) {
             foreach ($value as $itemValue){
                 $option = $inputOptions[$itemValue];
                 $option['checked'] = true;
@@ -39,7 +39,7 @@ class modTemplateVarInputRenderCheckboxSortable extends modTemplateVarInputRende
         $options = $this->getInputOptions();
 
         $inputOptions = array();
-        foreach ($options as $inputOption){
+        foreach ($options as $inputOption) {
             $inputopt_array = (is_array($inputOption)) ? $inputOption : explode('==', $inputOption);
             $option['value'] = isset($inputopt_array[1]) ? $inputopt_array[1] : $inputopt_array[0];
             $option['text'] = htmlspecialchars($inputopt_array[0], ENT_COMPAT, $this->modx->getOption('modx_charset'));
