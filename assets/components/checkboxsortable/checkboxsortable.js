@@ -14,10 +14,7 @@ CheckboxSortable.TV =  function(config) {
             ,dataIndex: 'checked'
             ,width: 80
             ,fixed: true
-            ,renderer: function(v, meta, rec, rowIdx, colIdx, store, view) {
-                var data = rec.data;
-                return '<div style="text-align: center"><input type="checkbox" value="'+ data.value +'" '+ (v ? "checked" : "") +' name="'+ data.name +'" /></div>'
-            }
+            ,renderer: this.renderCheckbox
         }]
         ,viewConfig: {
             enableRowBody: true
@@ -40,17 +37,29 @@ CheckboxSortable.TV =  function(config) {
                 fn: function(grid, rowIdx, e) {
                     var store = this.getStore()
                         ,row = store.getAt(rowIdx)
-                        ,record = row.data;
+                        ,checked = !row.data.checked;
 
-                    row.set('checked', !record.checked);
+                    row.set('checked', checked);
 
                     if (this.autoPlace) {
                         var firstUnchecked = store.find('checked', false);
-                        if (firstUnchecked != -1 && firstUnchecked < rowIdx) {
-                            this.placeAt(firstUnchecked);
-                        } else if (firstUnchecked == 0) {
-                            var last = store.getCount() - 1;
-                            this.placeAt(last);
+                        if (checked) {
+                            if (firstUnchecked == 0) {
+                                // First entry checked
+                                this.placeAt(0);
+                            } else if (firstUnchecked == (rowIdx + 1) || firstUnchecked < 0) {
+                                // Stay at the current place
+                                this.placeAt(rowIdx);
+                            } else {
+                                // Place before the first unchecked entry
+                                this.placeAt(firstUnchecked);
+                            }
+                        } else {
+                            if (firstUnchecked >= 0) {
+                                // Place at the bottom
+                                var last = store.getCount() - 1;
+                                this.placeAt(last);
+                            }
                         }
                     } else {
                         MODx.fireResourceFormChange();
@@ -86,6 +95,11 @@ CheckboxSortable.TV =  function(config) {
 Ext.extend(CheckboxSortable.TV, Ext.grid.GridPanel, {
     refreshView: function() {
         this.getView().refresh();
+    }
+
+    ,renderCheckbox: function(v, meta, rec, rowIdx, colIdx, store, view) {
+        var data = rec.data;
+        return '<div style="text-align: center"><input type="checkbox" value="'+ data.value +'" '+ (v ? "checked" : "") +' name="'+ data.name +'" /></div>'
     }
 
     ,placeAt: function(index) {

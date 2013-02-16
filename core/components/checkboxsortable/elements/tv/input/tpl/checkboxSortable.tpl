@@ -13,7 +13,6 @@
                 ,{name: 'value'}
                 ,{name: 'label'}
                 ,{name: 'checked'}
-                //,{name: 'test'}
             ])
             ,data: [{/literal}
                 {foreach from=$opts item=item key=k name=checkboxsortable}
@@ -21,9 +20,8 @@
                      'tv{$tv->id}-{$k}'
                     ,'tv{$tv->id}[]'
                     ,'{$item.value}'
-                    ,'{$item.text|escape:"javascript"}'
+                    ,'{$item.label|escape:"javascript"}'
                     ,{if $item.checked}true{else}false{/if}
-                    //,'<center><input id="tv{$tv->id}-{$k}" type="checkbox" value="{$item.value}" name="tv{$tv->id}[]" {if $item.checked}checked{/if} /></center>'
                     {literal}],{/literal}
                 {/foreach}
                 {literal}]
@@ -32,7 +30,7 @@
         var grid = new CheckboxSortable.TV({
             store: store{/literal}{$tv->id}{literal}
             ,renderTo: {/literal}'tv{$tv->id}-checkboxsortable'{literal}
-            ,autoPlace: {/literal}{if $params.autoplace}true{else}false{/if}{literal}
+            ,autoPlace: {/literal}{$params.autoplace}{literal}
         });
 
         // Dirty work around to resize the grid
@@ -44,6 +42,7 @@
                 Ext.each(array, function(item, idx, list) {
                     list[idx] = item.trim();
                 });
+                array.push('modx-panel-resource-tv');
                 if (array.indexOf(tab.id) != -1) {
                     grid.refreshView();
                 }

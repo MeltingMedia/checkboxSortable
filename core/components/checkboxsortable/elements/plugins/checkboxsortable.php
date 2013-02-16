@@ -7,7 +7,6 @@ $corePath = $modx->getOption('checkboxsortable.core_path', null, $modx->getOptio
 $assetsURL = $modx->getOption('checkboxsortable.assets_url', $modx->getOption('assets_url') . 'components/checkboxsortable/');
 $modx->lexicon->load('checkboxsortable:default');
 $lexicons = $modx->lexicon->loadCache('checkboxsortable', 'default');
-//$modx->log(modX::LOG_LEVEL_ERROR, print_r($lexicons, true));
 
 switch ($modx->event->name) {
 

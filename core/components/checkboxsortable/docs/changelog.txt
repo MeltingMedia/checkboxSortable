@@ -1,0 +1,15 @@
+--------------------------------------------------------------------------------
+Changelog for CheckboxSortable
+--------------------------------------------------------------------------------
+
+2013/xx/xx: 0.2.0-dev
+================================================================================
+- Experimental feature to automatically move checked record at the bottom of
+  already checked records
+- Fix issue where not valid values where displayed with no label in the grid
+  (they now are skipped)
+- Fixed compatibility issues for MODX 2.2
+
+2010/12/15: 0.1-beta1
+================================================================================
+- First release on http://forums.modx.com/thread/32575/sortablecheckbox-input-filter-revo

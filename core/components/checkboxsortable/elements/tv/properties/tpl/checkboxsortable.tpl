@@ -39,6 +39,21 @@
                 ,forId: 'inopt_tab_ids{/literal}{$tv}{literal}'
                 ,html: _('checkboxsortable.property_tab_id_desc')
                 ,cls: 'desc-under'
+            },{
+                xtype: 'combo-boolean'
+                ,fieldLabel: _('checkboxsortable.property_autoplace')
+                ,description: MODx.expandHelp ? '' : _('checkboxsortable.property_autoplace_desc')
+                ,name: 'inopt_autoplace'
+                ,hiddenName: 'inopt_autoplace'
+                ,id: 'inopt_autoplace{/literal}{$tv}{literal}'
+                ,value: !(params['autoplace'] == 0 || params['autoplace'] == 'false')
+                ,width: false
+                ,listeners: oc
+            },{
+                xtype: MODx.expandHelp ? 'label' : 'hidden'
+                ,forId: 'inopt_autoplace{/literal}{$tv}{literal}'
+                ,html: _('checkboxsortable.property_autoplace_desc')
+                ,cls: 'desc-under'
             }]
             ,renderTo: 'checkboxsortable-tv-{/literal}{$tv}{literal}'
         });

@@ -1,6 +1,8 @@
 <?php
 class modTemplateVarInputRenderCheckboxSortable extends modTemplateVarInputRender
 {
+    public $choices = array();
+
     public function getTemplate()
     {
         return $this->modx->getOption('checkboxsortable.core_path', null, $this->modx->getOption('core_path') . 'components/checkboxsortable/') . 'elements/tv/input/tpl/checkboxsortable.tpl';
@@ -8,23 +10,28 @@ class modTemplateVarInputRenderCheckboxSortable extends modTemplateVarInputRende
 
     public function process($value, array $params = array())
     {
-        $default = explode('||', $this->tv->default_text); // all standard values
+        // Default value(s)
+        $default = explode('||', $this->tv->default_text);
         $value = trim($value);
-        $value = empty($value) ? $default : explode('||', $value); // current saved values or default
+        // current saved values or default
+        $values = empty($value) ? $default : explode('||', $value);
 
-        $inputOptions = $this->prepareRecords();
+        $this->prepareRecords();
 
         $options = array();
-        if (!empty($value[0]) && count($value) > 0) {
-            foreach ($value as $itemValue){
-                $option = $inputOptions[$itemValue];
-                $option['checked'] = true;
-                $options[] = $option;
-                unset($inputOptions[$itemValue]);
+        if (!empty($values[0]) && count($values) > 0) {
+            foreach ($values as $itemValue) {
+                // Make sure the value exists in the possible choices
+                if ($this->isValidValue($itemValue) !== false) {
+                    $option = $this->choices[$itemValue];
+                    $option['checked'] = true;
+                    $options[] = $option;
+                }
+                unset($this->choices[$itemValue]);
             }
         }
 
-        $options = count($options) > 0 ? array_merge($options, $inputOptions) : $inputOptions;
+        $options = count($options) > 0 ? array_merge($options, $this->choices) : $this->choices;
 
         $this->setPlaceholder('opts', $options);
     }
@@ -42,12 +49,34 @@ class modTemplateVarInputRenderCheckboxSortable extends modTemplateVarInputRende
         foreach ($options as $inputOption) {
             $inputopt_array = (is_array($inputOption)) ? $inputOption : explode('==', $inputOption);
             $option['value'] = isset($inputopt_array[1]) ? $inputopt_array[1] : $inputopt_array[0];
-            $option['text'] = htmlspecialchars($inputopt_array[0], ENT_COMPAT, $this->modx->getOption('modx_charset'));
+            $option['label'] = htmlspecialchars($inputopt_array[0], ENT_COMPAT, $this->modx->getOption('modx_charset'));
             $option['checked'] = false;
             $inputOptions[$option['value']] = $option;
         }
 
-        return $inputOptions;
+        $this->choices = $inputOptions;
+    }
+
+    public function isValidValue($value)
+    {
+        foreach ($this->choices as $idx => $entry) {
+            if ($entry['value'] == $value) return true;
+        }
+
+        return false;
+
+    }
+
+    public function recursive_array_search($needle, array $haystack)
+    {
+        foreach ($haystack as $key => $value) {
+            $current_key = $key;
+            if ($needle === $value OR (is_array($value) && $this->recursive_array_search($needle, $value) !== false)) {
+                return $current_key;
+            }
+        }
+
+        return false;
     }
 }
 

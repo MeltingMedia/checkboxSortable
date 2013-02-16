@@ -14,7 +14,7 @@ set_time_limit(0);
 // define package
 define('PKG_ABBR', 'checkboxsortable');
 define('PKG_NAME', strtolower(PKG_NAME));
-define('PKG_VERSION', '1.0.0');
+define('PKG_VERSION', '0.2.0');
 define('PKG_RELEASE', 'dev');
 
 /* override with your own defines here (see build.config.sample.php) */
