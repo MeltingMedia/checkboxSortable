@@ -4,7 +4,7 @@
  * @var array $scriptProperties
  */
 $corePath = $modx->getOption('checkboxsortable.core_path', null, $modx->getOption('core_path') . 'components/checkboxsortable/');
-$assetsURL = $modx->getOption('checkboxsortable.assets_url', $modx->getOption('assets_url') . 'components/checkboxsortable/');
+$assetsURL = $modx->getOption('checkboxsortable.assets_url', null, $modx->getOption('assets_url') . 'components/checkboxsortable/');
 $modx->lexicon->load('checkboxsortable:default');
 $lexicons = $modx->lexicon->loadCache('checkboxsortable', 'default');
 

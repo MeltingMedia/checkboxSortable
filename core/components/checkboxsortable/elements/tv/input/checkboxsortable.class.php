@@ -13,7 +13,7 @@ class modTemplateVarInputRenderCheckboxSortable extends modTemplateVarInputRende
         // Default value(s)
         $default = explode('||', $this->tv->default_text);
         $value = trim($value);
-        // current saved values or default
+        // Current saved values or default
         $values = empty($value) ? $default : explode('||', $value);
 
         $this->prepareRecords();
@@ -32,12 +32,13 @@ class modTemplateVarInputRenderCheckboxSortable extends modTemplateVarInputRende
         }
 
         $options = count($options) > 0 ? array_merge($options, $this->choices) : $this->choices;
-
         $this->setPlaceholder('opts', $options);
+        
+        return $options;
     }
 
     /**
-     * Prepares the default input options to be usable within the grid store
+     * Prepares the input options values to be usable within the grid store
      *
      * @return array The store array
      */
@@ -57,6 +58,12 @@ class modTemplateVarInputRenderCheckboxSortable extends modTemplateVarInputRende
         $this->choices = $inputOptions;
     }
 
+    /**
+     * Checks if the given value exist in the valid choices
+     *
+     * @param string $value The value to check
+     * @return bool Whether or not the value is found
+     */
     public function isValidValue($value)
     {
         foreach ($this->choices as $idx => $entry) {
@@ -65,18 +72,6 @@ class modTemplateVarInputRenderCheckboxSortable extends modTemplateVarInputRende
 
         return false;
 
-    }
-
-    public function recursive_array_search($needle, array $haystack)
-    {
-        foreach ($haystack as $key => $value) {
-            $current_key = $key;
-            if ($needle === $value OR (is_array($value) && $this->recursive_array_search($needle, $value) !== false)) {
-                return $current_key;
-            }
-        }
-
-        return false;
     }
 }
 

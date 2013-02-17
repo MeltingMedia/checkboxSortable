@@ -1,8 +1,8 @@
 --------------------------------------------------------------------------------
-Changelog for CheckboxSortable
+Changelog for CheckboxSortable TV Type
 --------------------------------------------------------------------------------
 
-2013/xx/xx: 0.2.0-dev
+2013/02/17: 0.2.0-dev
 ================================================================================
 - Experimental feature to automatically move checked record at the bottom of
   already checked records
