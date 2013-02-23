@@ -37,21 +37,14 @@
         var tabs = Ext.getCmp('modx-resource-tabs');
         tabs.on('tabChange', function(elem, tab) {
         {/literal}
-            {if $params.tab_ids}
-                var array = '{$params.tab_ids}'.split(',');
-                Ext.each(array, function(item, idx, list) {
-                    list[idx] = item.trim();
-                });
-                array.push('modx-panel-resource-tv');
-                if (array.indexOf(tab.id) != -1) {
-                    grid.refreshView();
-                }
-            {else}
-                // Default TV panel
-                if (tab.id == 'modx-panel-resource-tv') {
-                    grid.refreshView();
-                }
-            {/if}
+            var array = '{$params.tab_ids}'.split(',');
+            Ext.each(array, function(item, idx, list) {
+                list[idx] = item.trim();
+            });
+            array.push('modx-panel-resource-tv');
+            if (array.indexOf(tab.id) != -1) {
+                grid.refreshView();
+            }
         {literal}
             if (tab.id == '{/literal}{$params.tab_ids}{literal}') {
                 grid.refreshView();
