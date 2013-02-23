@@ -32,8 +32,13 @@ class modTemplateVarInputRenderCheckboxSortable extends modTemplateVarInputRende
         }
 
         $options = count($options) > 0 ? array_merge($options, $this->choices) : $this->choices;
+//        $this->modx->invokeEvent('BeforeOutputOptions', array(
+//            'tv' => &$this,
+//            'options' => $options,
+//        ));
+
         $this->setPlaceholder('opts', $options);
-        
+
         return $options;
     }
 
