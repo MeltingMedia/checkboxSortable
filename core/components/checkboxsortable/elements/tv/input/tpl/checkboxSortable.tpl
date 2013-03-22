@@ -34,25 +34,32 @@
         });
 
         // Dirty work around to resize the grid
-        var tabs = Ext.getCmp('modx-resource-tabs');
-        tabs.on('tabChange', function(elem, tab) {
-        {/literal}
-            var array = '{$params.tab_ids}'.split(',');
-            Ext.each(array, function(item, idx, list) {
-                list[idx] = item.trim();
+        if (MODx.config.tvs_below_content == 1) {
+            var panel = Ext.getCmp('modx-panel-resource-tv');
+            panel.on('afterlayout', function() {
+                grid.refreshView();
             });
-            array.push('modx-panel-resource-tv');
-            if (array.indexOf(tab.id) != -1) {
+        } else {
+            var tabs = Ext.getCmp('modx-resource-tabs');
+            tabs.on('tabChange', function(elem, tab) {
+                {/literal}
+                var array = '{$params.tab_ids}'.split(',');
+                Ext.each(array, function(item, idx, list) {
+                    list[idx] = item.trim();
+                });
+                array.push('modx-panel-resource-tv');
+                if (array.indexOf(tab.id) != -1) {
+                    grid.refreshView();
+                }
+                {literal}
+                if (tab.id == '{/literal}{$params.tab_ids}{literal}') {
+                    grid.refreshView();
+                }
+            });
+            tabs.on('resize', function() {
                 grid.refreshView();
-            }
-        {literal}
-            if (tab.id == '{/literal}{$params.tab_ids}{literal}') {
-                grid.refreshView();
-            }
-        });
-        tabs.on('resize', function() {
-            grid.refreshView();
-        });
+            });
+        }
     });
     {/literal}
     // ]]>
