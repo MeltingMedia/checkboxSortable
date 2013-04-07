@@ -199,8 +199,13 @@ Ext.extend(CheckboxSortable.TV, Ext.grid.GridPanel, {
         }
 
         if (MODx.config.tvs_below_content != 1) {
+            var events = ['resize'];
+            if (hTabs && vTabs.items.length == 1) {
+                // Just one tab in modx-resource-tabs
+                events.push('tabChange');
+            }
             // TVs are within the "default" tabs
-            this._listenFor('modx-resource-tabs', vTabs, ['resize']);
+            this._listenFor('modx-resource-tabs', vTabs, events);
         } else {
             // TVs are below the content
             this._listenFor('modx-panel-resource-tv', vTabs, ['afterlayout']);
