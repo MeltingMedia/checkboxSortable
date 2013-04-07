@@ -5,12 +5,10 @@ CheckboxSortable.TV =  function(config) {
 
     Ext.applyIf(config, {
         columns: [{
-            id: 'label'
-            ,header: _('checkboxsortable.column_name')
+            header: _('checkboxsortable.column_name')
             ,dataIndex: 'label'
         },{
-            id: 'checked'
-            ,header: _('checkboxsortable.column_active')
+            header: _('checkboxsortable.column_active')
             ,dataIndex: 'checked'
             ,width: 80
             ,fixed: true
@@ -40,7 +38,6 @@ CheckboxSortable.TV =  function(config) {
                 }
             }
         })
-
         ,listeners: {
             rowClick: {
                 fn: function(grid, rowIdx, e) {
@@ -131,10 +128,13 @@ Ext.extend(CheckboxSortable.TV, Ext.grid.GridPanel, {
         return '<div style="text-align: center"><input type="checkbox" value="'+ data.value +'" '+ (v ? "checked" : "") +' name="'+ data.name +'" /></div>'
     }
 
+    /**
+     * Place the currently selected record at the given index
+     */
     ,placeAt: function(index) {
-        var sm = this.getSelectionModel();
-        var rows = sm.getSelections();
-        var store = this.getStore();
+        var sm = this.getSelectionModel()
+            ,rows = sm.getSelections()
+            ,store = this.getStore();
 
         if (sm.hasSelection()) {
             for (i = 0; i < rows.length; i ++) {
