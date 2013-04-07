@@ -1,11 +1,57 @@
 <?php
+
 class modTemplateVarInputRenderCheckboxSortable extends modTemplateVarInputRender
 {
     public $choices = array();
+    public $prefix = 'checkboxsortable';
 
-    public function getTemplate()
+    public function render($value, array $params = array())
     {
-        return $this->modx->getOption('checkboxsortable.core_path', null, $this->modx->getOption('core_path') . 'components/checkboxsortable/') . 'elements/tv/input/tpl/checkboxsortable.tpl';
+        $id = 'tv'. $this->tv->get('id') .'-' . $this->prefix;
+        $assetsURL = $this->modx->getOption("{$this->prefix}.assets_url", null, $this->modx->getOption('assets_url') . "components/{$this->prefix}/");
+        $this->modx->controller->addJavascript($assetsURL . "{$this->prefix}.js");
+
+        $this->modx->controller->addHtml('<script type="text/javascript">
+            Ext.onReady(function() {
+                MODx.load({
+                    xtype: "checkboxsortable-grid"
+                    ,renderTo: "'. $id .'"
+                    ,tvParams: '. $this->modx->toJSON($params) .'
+                    ,store: '. $this->setStore($value, $params) .'
+                });
+            });
+        </script>');
+
+        return '<div id="'. $id .'" class="'. $id .'"></div>';
+    }
+
+    public function setStore($value, array $params = array())
+    {
+        $data = $this->process($value, $params);
+
+        $storeData = [];
+        $tvID = $this->tv->get('id');
+        foreach ($data as $idx => $v) {
+            $storeData[] = array(
+                "tv{$tvID}-{$idx}",
+                "tv{$tvID}[]",
+                "{$v['value']}",
+                "{$v['label']}",
+                $v['checked'] ? true : false
+            );
+        }
+
+        return 'new Ext.data.Store({
+            autoDestroy: true
+            ,reader: new Ext.data.ArrayReader({}, [
+                 {name: "id"}
+                ,{name: "name"}
+                ,{name: "value"}
+                ,{name: "label"}
+                ,{name: "checked"}
+            ])
+            ,data: '. $this->modx->toJSON($storeData) .'
+        })';
     }
 
     public function process($value, array $params = array())
@@ -37,7 +83,7 @@ class modTemplateVarInputRenderCheckboxSortable extends modTemplateVarInputRende
 //            'options' => $options,
 //        ));
 
-        $this->setPlaceholder('opts', $options);
+        //$this->setPlaceholder('opts', $options);
 
         return $options;
     }

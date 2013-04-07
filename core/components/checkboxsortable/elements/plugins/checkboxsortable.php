@@ -15,7 +15,11 @@ switch ($modx->event->name) {
         $modx->controller->addHtml('<script type="text/javascript">
     Ext.applyIf(MODx.lang, '. $modx->toJSON($lexicons) .');
 </script>');
-        $modx->regClientStartupScript($assetsURL . 'checkboxsortable.js');
+        //$modx->regClientStartupScript($assetsURL . 'checkboxsortable.js');
+        if ('OnTVFormPrerender' == $modx->event->name) {
+            // Load JS for input properties
+            $modx->regClientStartupScript($assetsURL . 'checkboxsortable-properties.js');
+        }
         break;
 
     case 'OnTVInputRenderList':
