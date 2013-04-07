@@ -2,6 +2,11 @@
 Changelog for CheckboxSortable TV Type
 --------------------------------------------------------------------------------
 
+2013/04/07: 0.3.0-beta2
+================================================================================
+- Better grid resize
+- Removed Smarty layer
+
 2013/02/17: 0.2.0-dev
 ================================================================================
 - Experimental feature to automatically move checked record at the bottom of
