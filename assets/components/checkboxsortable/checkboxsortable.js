@@ -32,6 +32,14 @@ CheckboxSortable.TV =  function(config) {
         ,enableColumnMove: false
         ,enableColumnResize: false
         ,enableColumnHide: false
+        ,sm: new Ext.grid.RowSelectionModel({
+            singleSelect: true
+            ,listeners: {
+                beforerowselect: function(sm, idx, keep, record) {
+                    sm.grid.ddText = '<div>'+ _('checkboxsortable.entry_sort') +' : '+ record.data.label +'</div>';
+                }
+            }
+        })
 
         ,listeners: {
             rowClick: {
@@ -76,22 +84,39 @@ CheckboxSortable.TV =  function(config) {
     });
     CheckboxSortable.TV.superclass.constructor.call(this, config);
 
-    new Ext.dd.DropTarget(this.getView().mainBody, {
+    this.dropTarget = new Ext.dd.DropTarget(this.getView().mainBody, {
         ddGroup: 'checkboxsortableGroup'
+        ,notifyOver: function(source, e, data) {
+            if (source.getDragData(e)) {
+                var targetNode = source.getDragData(e).selections[0]
+                    ,sourceNode = data.selections[0];
+
+                if (sourceNode.data['checked'] != targetNode.data['checked'] || sourceNode.data['checked'] === false) {
+                    return this.dropNotAllowed;
+                }
+            }
+
+            return this.dropAllowed;
+        }
         ,notifyDrop: function(source, e, data) {
             var sm = source.grid.getSelectionModel()
                 ,rows = sm.getSelections()
                 ,cindex = source.getDragData(e).rowIndex
                 ,store = source.grid.getStore();
 
-            if (sm.hasSelection()) {
-                for (i = 0; i < rows.length; i ++) {
-                    store.remove(store.getById(rows[i].id));
-                    store.insert(cindex, rows[i]);
+            if (source.getDragData(e)) {
+                var targetNode = source.getDragData(e).selections[0]
+                    ,sourceNode = data.selections[0];
+
+                // Prevent drop on certain circumstances
+                if (targetNode.data['checked'] != sourceNode.data['checked'] || sourceNode.data['checked'] === false) {
+                    return false;
                 }
-                sm.selectRecords(rows);
+
+                store.remove(sourceNode);
+                store.insert(cindex, sourceNode);
+                MODx.fireResourceFormChange();
             }
-            MODx.fireResourceFormChange();
         }
     });
 };
