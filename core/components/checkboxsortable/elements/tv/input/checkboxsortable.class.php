@@ -29,7 +29,7 @@ class modTemplateVarInputRenderCheckboxSortable extends modTemplateVarInputRende
     {
         $data = $this->process($value, $params);
 
-        $storeData = [];
+        $storeData = array();
         $tvID = $this->tv->get('id');
         foreach ($data as $idx => $v) {
             $storeData[] = array(
