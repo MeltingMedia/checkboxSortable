@@ -15,7 +15,7 @@ set_time_limit(0);
 define('PKG_NAME', 'CheckboxSortable');
 define('PKG_NAME_LOWER', strtolower(PKG_NAME));
 define('PKG_VERSION', '0.3.0');
-define('PKG_RELEASE', 'beta2');
+define('PKG_RELEASE', 'beta3');
 
 // Define build paths
 $root = dirname(dirname(__FILE__)) . '/';
